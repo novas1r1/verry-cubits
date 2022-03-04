@@ -2,7 +2,7 @@ part of 'goal_list_cubit.dart';
 
 enum GoalListStatus { initial, loading, success, failure }
 
-class GoalListState {
+class GoalListState extends Equatable {
   final GoalListStatus status;
   final List<Goal> goals;
   final Exception? exception;
@@ -24,4 +24,7 @@ class GoalListState {
       exception: exception ?? this.exception,
     );
   }
+
+  @override
+  List<Object?> get props => [status, goals, exception];
 }
