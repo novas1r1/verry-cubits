@@ -24,42 +24,40 @@ class GoalListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Goal List')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: BlocConsumer<GoalListCubit, GoalListState>(
-          listener: (context, state) {
-            if (state.status == GoalListStatus.success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Goals successfully refreshed')),
-              );
-            } else if (state.status == GoalListStatus.failure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${state.exception}')),
-              );
-            }
-          },
-          builder: (context, state) {
-            return BlocBuilder<GoalListCubit, GoalListState>(
-              builder: (context, state) {
-                switch (state.status) {
-                  case GoalListStatus.loading:
-                    return const Center(child: CircularProgressIndicator());
-                  case GoalListStatus.initial:
-                  case GoalListStatus.success:
-                  case GoalListStatus.failure:
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.goals.length,
-                      itemBuilder: (context, index) => ListTile(
-                        title: Text(state.goals[index].title),
-                        subtitle: Text(state.goals[index].description),
-                      ),
-                    );
-                }
-              },
+      body: BlocConsumer<GoalListCubit, GoalListState>(
+        listener: (context, state) {
+          if (state.status == GoalListStatus.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Goals successfully refreshed')),
             );
-          },
-        ),
+          } else if (state.status == GoalListStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('${state.exception}')),
+            );
+          }
+        },
+        builder: (context, state) {
+          return BlocBuilder<GoalListCubit, GoalListState>(
+            builder: (context, state) {
+              switch (state.status) {
+                case GoalListStatus.loading:
+                  return const Center(child: CircularProgressIndicator());
+                case GoalListStatus.initial:
+                case GoalListStatus.success:
+                case GoalListStatus.failure:
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    shrinkWrap: true,
+                    itemCount: state.goals.length,
+                    itemBuilder: (context, index) => ListTile(
+                      title: Text(state.goals[index].title),
+                      subtitle: Text(state.goals[index].description),
+                    ),
+                  );
+              }
+            },
+          );
+        },
       ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
